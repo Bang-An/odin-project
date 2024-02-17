@@ -44,7 +44,7 @@ const Gameboard = (() => {
         board[index] = maker;
         render();
     }
-
+    
     return {
         getBoard,
         render,
@@ -57,7 +57,15 @@ function createPlayer(name, maker){
     return {name, maker};
 }
 
+const displayController = (() => {
+    function diplayMessage(message){
+        document.querySelector('#message').innerHTML = message;
+    }
 
+    return {
+        diplayMessage
+    }
+})()
 
 const Game = (() =>{
     let players;
@@ -76,24 +84,79 @@ const Game = (() =>{
 
     }
 
+    function restartGame(){
+        Gameboard.getBoard().forEach((_, index) => {
+            Gameboard.update(index, "");
+        });
+        startGame();
+        document.querySelector("#message").innerHTML = "";
+        gameOver = false;
+    }
+
     function handleClick(event){
+        if(gameOver){
+            return;
+        }
+
         let index = parseInt(event.target.id.split("-")[1]);
         if(Gameboard.getBoard()[index] !== ""){
-            alert("this cell is already marked")
-            return
+            displayController.diplayMessage("this cell is already taken")
+            return;
         }   
         Gameboard.update(index, players[currPlayerIndex].maker);
+
+        if(checkWinner(Gameboard.getBoard())){
+            gameOver = true;
+            displayController.diplayMessage(`${players[currPlayerIndex].name} won the game`)
+        }else if(checkTie(Gameboard.getBoard())){
+            gameOver = true;
+            displayController.diplayMessage("Tie!")
+        }
+        
+        
         currPlayerIndex = currPlayerIndex === 0 ? 1 : 0;
+    }
+
+    function checkWinner(board){
+        const winningCondition = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+        for(let i = 0; i < winningCondition.length; i++){
+            const [a, b, c] = winningCondition[i];
+            if(board[a] && board[a] === board[b] && board[b] === board[c]){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkTie(board){
+        return board.every(cell => cell !== "");
     }
 
     return{
         startGame,
-        handleClick
+        handleClick,
+        restartGame
     }
 })()
 
-const startBtn = document.querySelector('#start-button');
-startBtn.addEventListener('click', () => {
-    Game.startGame();
-})
-// Game.startGame();
+
+const domControl = (() => {
+    const startBtn = document.querySelector('#start-button');
+    startBtn.addEventListener('click', () => {
+        Game.startGame();
+    })
+
+    const restartBtn = document.querySelector('#restart-button');
+    restartBtn.addEventListener('click', () => {
+        Game.restartGame();
+});
+})()
