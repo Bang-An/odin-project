@@ -1,0 +1,34 @@
+#title {
+    text-align: center;
+}
+
+#gameboard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px); /* Creates a 3-column grid, each column 100px wide */
+    grid-template-rows: repeat(3, 100px); /* Creates 3 rows, each row 100px tall */
+    gap: 10px; /* Sets the gap between rows and columns */
+    justify-content: center; /* Center the grid horizontally */
+    align-items: center; /* Center the grid vertically */
+    margin: auto; /* Center the grid block in its container */
+}
+
+.square {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    background-color: #f0f0f0; /* Light gray background */
+    font-size: 24px; /* Larger text for X and O */
+    font-weight: bold; /* Make the X and O bold */
+    cursor: pointer; /* Change mouse cursor to pointer when hovering over a square */
+    border: 2px solid #d4d4d4; /* Adds a border to each square */
+    width: 100px; /* Set a fixed width for each square */
+    height: 100px; /* Set a fixed height for each square */
+    border-radius: 5px; /* Optional: Adds rounded corners to the squares */
+}
+
+#control {
+    display: flex;  
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
